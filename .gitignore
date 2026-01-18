@@ -8,3 +8,7 @@ __pycache__/
 testing.ipynb
 __pycache__/
 uploads/
+dist/
+build/
+*.egg-info/
+*.egg
