@@ -3,7 +3,7 @@ import setuptools
 from setuptools import setup, find_packages
 
 setup(
-    name='topsis-raunaqmittal',  # Unique package name
+    name='Topsis-102303752',  # Unique package name
     version='0.1.0',
     author='Raunaq Mittal',
     author_email='raunaqmittal2004@gmail.com',
