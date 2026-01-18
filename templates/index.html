@@ -7,77 +7,126 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            font-family: Arial, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #141414;
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
+            padding: 20px;
         }
         .container {
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
-            padding: 40px;
+            background: #221f1f;
+            border-radius: 8px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+            padding: 50px;
             width: 90%;
-            max-width: 450px;
+            max-width: 550px;
+            border: 1px solid #333;
         }
         h1 {
-            color: #333;
+            color: #e50914;
             text-align: center;
-            margin-bottom: 25px;
+            margin-bottom: 10px;
+            font-size: 36px;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+        .author {
+            text-align: center;
+            color: #b3b3b3;
+            font-size: 12px;
+            margin-bottom: 30px;
+        }
+        .author a {
+            color: #e50914;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .author a:hover {
+            text-decoration: underline;
         }
         .form-group {
-            margin-bottom: 15px;
+            margin-bottom: 18px;
         }
         label {
             display: block;
-            margin-bottom: 5px;
-            color: #333;
-            font-weight: bold;
+            margin-bottom: 8px;
+            color: #e5e5e5;
+            font-weight: 600;
             font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
         input {
             width: 100%;
-            padding: 10px;
-            border: 2px solid #e0e0e0;
-            border-radius: 5px;
+            padding: 12px;
+            border: 1px solid #404040;
+            border-radius: 4px;
             font-size: 13px;
+            background: #333333;
+            color: #e5e5e5;
+            transition: all 0.3s ease;
+        }
+        input::placeholder {
+            color: #808080;
         }
         input:focus {
             outline: none;
-            border-color: #667eea;
+            border-color: #e50914;
+            background: #404040;
+            box-shadow: 0 0 8px rgba(229, 9, 20, 0.3);
         }
         button {
             width: 100%;
-            padding: 11px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 12px;
+            background: #e50914;
             color: white;
             border: none;
-            border-radius: 5px;
-            font-weight: bold;
+            border-radius: 4px;
+            font-weight: 700;
             cursor: pointer;
-            margin-top: 10px;
+            margin-top: 12px;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
         }
         button:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+            background: #c40812;
+            box-shadow: 0 4px 15px rgba(229, 9, 20, 0.4);
+            transform: translateY(-2px);
+        }
+        button:active {
+            transform: translateY(0);
         }
         .message {
-            margin-top: 15px;
-            padding: 10px;
-            border-radius: 5px;
+            margin-top: 18px;
+            padding: 12px;
+            border-radius: 4px;
             text-align: center;
             font-size: 13px;
-            font-weight: bold;
+            font-weight: 600;
         }
-        .success { background: #d4edda; color: #155724; }
-        .error { background: #f8d7da; color: #721c24; }
+        .success { 
+            background: #1a4d2e;
+            color: #4ade80;
+            border: 1px solid #2d7a4a;
+        }
+        .error { 
+            background: #4d1a1a;
+            color: #ff6b6b;
+            border: 1px solid #7a2d2d;
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>TOPSIS Ranker</h1>
+        <h1>TOPSIS</h1>
+        <div class="author">
+            By Raunaq Mittal<br>
+            <a href="mailto:raunaqmittal@email.com">raunaqmittal@email.com</a>
+        </div>
         <form method="post" enctype="multipart/form-data">
             <div class="form-group">
                 <label>CSV File</label>
