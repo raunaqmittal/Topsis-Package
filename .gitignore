@@ -1,7 +1,7 @@
 venv/
 test_files/
 .ipynb_checkpoints/
-images/
+
 __pycache__/
 *.pyc
 *.pyo
