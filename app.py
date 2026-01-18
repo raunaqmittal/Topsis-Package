@@ -3,7 +3,7 @@ import os
 import re
 import numpy as np
 import pandas as pd
-from topsis.topsis import topsis  # use the class from your module
+from topsis.topsis import topsis
 import smtplib
 from email.message import EmailMessage
 from dotenv import load_dotenv
@@ -37,6 +37,7 @@ def send_email_with_attachment(to_email, subject, body, attachment_path):
 @app.route('/', methods=['GET', 'POST'])
 def index():
     message = ''
+    results = None
     if request.method == 'POST':
         try:
             file = request.files['input_file']
@@ -49,6 +50,7 @@ def index():
                 raise Exception("Invalid email format")
 
             # Save uploaded CSV
+            os.makedirs(UPLOAD_FOLDER, exist_ok=True)
             filepath = os.path.join(UPLOAD_FOLDER, file.filename)
             file.save(filepath)
 
@@ -70,7 +72,7 @@ def index():
 
             # Run TOPSIS
             t = topsis(filepath, weights_list, impacts_list)
-            t.topsis_main(debug=False)  # computes p_scores and prints summary
+            t.topsis_main(debug=False)
 
             # Build result CSV (ID, Topsis Score, Rank)
             first_col_name = df_uploaded.columns[0]
@@ -91,11 +93,10 @@ def index():
 
             send_email_with_attachment(email, 'TOPSIS Result', 'Find attached your TOPSIS result.', output_path)
             message = 'Result sent to your email!'
+            results = output_df
         except Exception as e:
             message = f'Error: {e}'
-    return render_template('index.html', message=message)
+    return render_template('index.html', message=message, results=results)
 
 if __name__ == '__main__':
     app.run(debug=True)
-
-
