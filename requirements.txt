@@ -1,2 +1,5 @@
 numpy
 pandas
+flask
+requests
+python-dotenv

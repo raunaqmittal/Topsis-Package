@@ -218,6 +218,16 @@ Additional detailed analysis showing:
 - Separation measures visualization
 - Comprehensive ranking breakdown
 
+#### Output Example 3
+
+![Results Screenshot 3](images/notebook_ss_3.png)
+
+Web application visualization showing:
+
+- TOPSIS results displayed in bar chart format
+- Alternative rankings with corresponding scores
+- Real-time results from Flask web interface
+
 ## Data Format
 
 ### Input CSV Format
@@ -295,4 +305,3 @@ Contributions are welcome! Please feel free to submit pull requests or open issu
 This project is licensed under the MIT License - see the LICENSE file for details.
 
 ---
-
