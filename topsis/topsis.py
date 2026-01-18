@@ -2,41 +2,36 @@ import numpy as np
 import pandas as pd
 import re
 import sys
-# Class for topsis algorithm module
+
 class topsis:
-    # intializing following variables required 
+ 
     """
-    Attributes:
-        matrix : numpy 2-D array consisting of all attributes values
-        rows : count of rows in matrix
-        columns : count of columns in matrix
-        n_matrix : numpy 2-D array normalized matrix which is step1
-        w_matrix : numpy 2-D array weighted normalized matrix which is step2
-        weights : numpy column vector of input user weights
-        impacts : numpy column vector of input impacts
-        best : numpy column vector for all best values according to impact
-        worst : numpy column vector for all worst values according to impact
-        s_best : numpy row vector for all the norm calculated best values
-        s_worst : numpy row vector for all the norm calculated worst values
-        p_scores : numpy row vector consisting of all the scores calculated for each alternative
+    TOPSIS : Technique for Order of Preference by Similarity to Ideal Solution
+    Steps to be followed :
+    1. Construct the decision matrix from the given data.
+    2. Normalize the decision matrix.
+    3. Construct the weighted normalized decision matrix.
+    4. Determine the ideal and negative-ideal solutions.
+    5. Calculate the separation measures for each alternative.
+    6. Calculate the relative closeness to the ideal solution.
+    7. Rank the alternatives based on the relative closeness.
+    8. Display the results.
     """
     def __init__(self, file, weights, impacts):
-        """
-        Args:
-            file : Name of csv file to be read
-            weights : list of weights for each attribute
-            impacts : list of true or false values whether impact is to be maximized or minimized
-        """
+       
         # check for proper csv file
         assert "csv" in f"{file}", "Could not recognize csv file, try checking your input file"
         self.df = pd.read_csv(file).iloc[:, 1:]
         self.df_copy_id = pd.read_csv(file).iloc[:, 0]
-        # DATA PREPROCESSING
-        # using regular expressions to extract only numeric values along with floating values
+
+        # Data Preprocessing
+        
+        # Using regular expressions to extract only numeric values along with floating values
         for i in self.df:
             self.df[i] = [re.findall("[0-9]*\.[0-9]+|[0-9]+", str(x))[0] for x in self.df[i]]
         self.matrix = np.array(self.df, dtype = np.float64)
-        # check for correct format of matrix
+
+        # Check for correct format of matrix
         assert len(self.matrix.shape) == 2, "Decision matrix a must be 2D"
 
         self.rows = len(self.matrix)
@@ -44,14 +39,15 @@ class topsis:
         self.n_matrix = np.array([[0]*self.columns for _ in range(self.rows)], dtype = np.float64)
         self.w_matrix = np.array([[0]*self.columns for _ in range(self.rows)], dtype = np.float64)
         self.weights = np.array(weights, dtype = np.float64)
-        # check for correct format of weights
+
+        # Check for correct format of weights
         assert len(self.weights.shape) == 1, "Weights array must be 1D"
-        assert self.weights.size == self.columns, f"Weights array wrong length, should be of length {self.columns}"
+        assert self.weights.size == self.columns, f"Weights array should be of length {self.columns}"
 
         self.impacts = np.array(impacts)
-        # check for correct format of impacts
+        # Check for correct format of impacts
         assert len(self.impacts.shape) == 1, "Impact array must be 1D"
-        assert self.impacts.size == self.columns, f"Impacts array wrong length, should be of length {self.columns}"
+        assert self.impacts.size == self.columns, f"Impacts array should be of length {self.columns}"
 
         self.best = np.array([0]*self.columns, dtype = np.float64)
         self.worst = np.array([0]*self.columns, dtype = np.float64)
@@ -77,24 +73,25 @@ class topsis:
                 self.best[i] = np.min(self.w_matrix[:, i])
                 self.worst[i] = np.max(self.w_matrix[:, i])
 
-    # step for calculating p_scores 
+    # Step for calculating p_scores 
     
     def rank_calculate(self):
         for i in range(self.rows):
             self.s_best[i] = np.sum((self.w_matrix[i, :] - self.best)**2)**0.5
             self.s_worst[i] = np.sum((self.w_matrix[i, :] - self.worst)**2)**0.5
         self.p_scores = self.s_worst/(self.s_best + self.s_worst)
-        final_scores_sorted = np.argsort(self.p_scores) # this returns indices of elements in sorted order
+
+        final_scores_sorted = np.argsort(self.p_scores) # gives indices of sorted array
         max_index = len(final_scores_sorted)
+
         rank = []
         for i in range(len(final_scores_sorted)):
-            rank.append(max_index - np.where(final_scores_sorted==i)[0][0])# since we know final_scores_sorted is already sorted, so
-            # it i need ranking from back side, so we need to subtract from maximum and get first value of tuple returned by np.where function
+            rank.append(max_index - np.where(final_scores_sorted==i)[0][0])
+            
         print(pd.DataFrame({"Models/id" : self.df_copy_id, "Ranks": np.array(rank)}))
         print(f"Result : Model/Alternative {np.argsort(self.p_scores)[-1] + 1} is best")
 
     def display(self):
-        print('DISPLAYING ALL INNER MATRICES FOR MORE INFORMATION:')
         print('Original Matrix :')
         print(self.matrix)
         print('Nomralized Matrix : ')
@@ -122,10 +119,11 @@ class topsis:
         if debug:
             print()
             self.display()
+
 # main driver function
 if __name__ == '__main__':
-    print('WELCOME TO TOPSIS RANKING ALGORITHM')
-    print('EXPECTED ARGUMENTS TO BE IN ORDER : python -m topsis.topsis <InputDataFile> <Weights> <Impacts> <Verbose(optional)>')
+    print('TOPSIS RANKING ALGORITHM')
+    print('Arguments to be entered in this order : python -m topsis.topsis <InputDataFile> <Weights> <Impacts> <Verbose(optional)>')
     if len(sys.argv) >= 4:
         file = sys.argv[1]
         weights = list(map(float, sys.argv[2].strip().split(',')))
@@ -140,18 +138,5 @@ if __name__ == '__main__':
         else:
             t.topsis_main()
     else:
-        print("PUT ARGUMENTS IN ORDER : python -m topsis.topsis <InputDataFile> <Weights> <Impacts> <Verbose>(optional)>")
+        print("Put Arguments in Correct order : python -m topsis.topsis <InputDataFile> <Weights> <Impacts> <Verbose>(optional)>")
 
-    # if want to use argparser constraining on some flags
-    # parser = argparse.ArgumentParser(description='Topsis algorithm')
-    # parser.add_argument("-f", help="input csv file name",type=str)
-    # parser.add_argument("-w", help="input weights",type=str)
-    # parser.add_argument("-i", help="input impacts using + or -",type=str)
-    # parser.add_argument("-v", help="enter any number to display output matrices otherwise only final result will be shown",type=int)
-    # args = parser.parse_args()
-    # file = args.f
-    # weights = list(map(float, args.w.split(',')))
-    # impacts = list(args.i.split(','))
-    # print(file)
-    # print(weights)
-    # print(impacts)
